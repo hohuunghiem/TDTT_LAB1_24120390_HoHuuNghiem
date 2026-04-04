@@ -8,9 +8,9 @@
 
 ## Tên mô hình và liên kết
 
-* Mô hình sử dụng: Hugging Face Transformers (pipeline summarization)
+* Mô hình sử dụng: VietAI/vit5-base-vietnews-summarization
 * Thư viện: transformers, torch
-* Link: https://huggingface.co/
+* Link mô hình: https://huggingface.co/VietAI/vit5-base-vietnews-summarization
 
 ## Mô tả hệ thống
 
