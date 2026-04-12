@@ -34,12 +34,26 @@ class SummarizeRequest(BaseModel):
         min_length=20,
         description="Văn bản tiếng Việt cần tóm tắt (tối thiểu 20 ký tự).",
     )
+    max_length: int = Field(
+        80,
+        ge=30,
+        le=200,
+        description="Độ dài tối đa của bản tóm tắt.",
+    )
+    min_length: int = Field(
+        20,
+        ge=10,
+        le=100,
+        description="Độ dài tối thiểu của bản tóm tắt.",
+    )
 
 
 class SummarizeResponse(BaseModel):
     model: str
     input: str
     summary: str
+    max_length: int
+    min_length: int
 
 
 class HealthResponse(BaseModel):
@@ -89,7 +103,7 @@ class SummarizationService:
     def get_device(self) -> str:
         return self.device
 
-    def summarize(self, text: str) -> str:
+    def summarize(self, text: str, max_length: int = 80, min_length: int = 20) -> str:
         cleaned_text = text.strip()
 
         if not cleaned_text:
@@ -97,7 +111,8 @@ class SummarizationService:
 
         if len(cleaned_text.split()) < 10:
             raise ValueError("Văn bản đầu vào quá ngắn để tóm tắt.")
-
+        if min_length >= max_length:
+            raise ValueError("min_length phải nhỏ hơn max_length.")
         self._load_model()
 
         prompt_text = "Tóm tắt: " + cleaned_text
@@ -114,8 +129,8 @@ class SummarizationService:
             summary_ids = self._model.generate(
                 input_ids=inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],
-                max_length=self.generation_config.max_length,
-                min_length=self.generation_config.min_length,
+                max_length=max_length,
+                min_length=min_length,
                 num_beams=self.generation_config.num_beams,
                 early_stopping=self.generation_config.early_stopping,
                 no_repeat_ngram_size=self.generation_config.no_repeat_ngram_size,
@@ -473,7 +488,11 @@ def predict(request: SummarizeRequest):
         )
 
     try:
-        summary = summarization_service.summarize(text)
+        summary = summarization_service.summarize(
+            text=text,
+            max_length=request.max_length,
+            min_length=request.min_length,
+        )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:
@@ -486,6 +505,8 @@ def predict(request: SummarizeRequest):
         model=summarization_service.get_model_name(),
         input=text,
         summary=summary,
+        max_length=request.max_length,
+        min_length=request.min_length,
     )
 
 

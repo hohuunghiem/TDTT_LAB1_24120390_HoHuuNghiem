@@ -34,10 +34,10 @@ def print_response(title, response):
 
 if __name__ == "__main__":
     try:
-      
+        print_response("DEMO", requests.get(f"{BASE_URL}/demo"))
         print_response("ROOT", requests.get(f"{BASE_URL}/"))
         print_response("HEALTH", requests.get(f"{BASE_URL}/health"))
-        print_response("DEMO", requests.get(f"{BASE_URL}/demo"))
+        
 
         start_time = time.time()
         res = requests.post(f"{BASE_URL}/predict", json=payload)
