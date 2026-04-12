@@ -50,7 +50,9 @@ Lưu ý phải mở bằng một terminal mới
 ```bash
 python demo_local_api.py
 python demo_public_api.py
-``` 
+```
+Sau khi chạy từng lệnh sẽ xuất hiện một số link URL 
+Chỉ cần copy và dán link đó qua web để thực hiện demo
 Lưu ý: Khi chạy lệnh python demo_public_api.py terminal sẽ bị chiếm quyền nên ưu tiên chạy python demo_local_api trước
 
 ---
