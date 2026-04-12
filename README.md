@@ -66,13 +66,13 @@ Lưu ý: Khi chạy lệnh python demo_public_api.py terminal sẽ bị chiếm 
 ### 1. Gọi trực tiếp trên web (Swagger UI)
 
 Sau khi server chạy, mở trình duyệt:
-  ```md
+
   Local:
   ```text
   http://127.0.0.1:8000/docs
   ```
 
-  ```md
+
   Pinggy:
   ```text
   https://<your-pinggy-link>/docs
